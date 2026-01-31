@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DARK RYXINZ - ULTIMATE ENGINE</title>
+    <title>DARK RYXINZ - IMMORTAL V9</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
@@ -12,18 +12,22 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: var(--bg); color: #fff; margin: 0; font-family: 'Roboto', sans-serif; padding-bottom: 80px; overflow-x: hidden; }
 
-        /* --- UI COMPONENTS --- */
+        /* --- LOGIN PAGE --- */
         #login-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+        .login-box { width: 100%; max-width: 300px; text-align: center; }
+        .login-box h1 { font-family: 'Orbitron'; color: var(--red); letter-spacing: 5px; text-shadow: 0 0 15px red; margin-bottom: 40px; }
+
+        /* --- DASHBOARD --- */
         #dashboard { display: none; }
         .app-bar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: #0c0c0c; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-        .app-bar h1 { font-family: 'Orbitron'; font-size: 14px; color: var(--red); letter-spacing: 2px; text-shadow: 0 0 5px red; }
+        .app-bar h1 { font-family: 'Orbitron'; font-size: 14px; color: var(--red); letter-spacing: 2px; }
 
         /* --- SIDEBAR --- */
         #sidebar { height: 100%; width: 0; position: fixed; z-index: 9999; top: 0; left: 0; background: #0a0a0a; overflow-x: hidden; transition: 0.3s; border-right: 1px solid var(--red); padding-top: 60px; }
         #sidebar a { padding: 15px 25px; text-decoration: none; font-size: 13px; color: #999; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #111; cursor: pointer; }
         #sidebar a i { color: var(--red); width: 20px; text-align: center; }
 
-        /* --- PAGES --- */
+        /* --- CONTENT --- */
         .container { padding: 20px; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
         .page { display: none; }
@@ -34,10 +38,9 @@
         .label { font-size: 9px; color: #666; text-transform: uppercase; }
         .value { font-size: 13px; font-weight: 700; text-align: right; }
 
+        /* --- FORM --- */
         input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 8px; color: #fff; margin-bottom: 12px; font-size: 13px; }
-        input:focus { border-color: var(--red); }
-        .btn { background: var(--red); color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron'; transition: 0.2s; }
-        .btn:active { transform: scale(0.98); opacity: 0.8; }
+        .btn { background: var(--red); color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron'; }
         
         /* --- NAV BOTTOM --- */
         .nav-bottom { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #0c0c0c; display: flex; border-top: 1px solid var(--border); z-index: 1000; }
@@ -49,13 +52,12 @@
 <body>
 
     <div id="login-page">
-        <h1 style="font-family:'Orbitron'; color:red; text-shadow: 0 0 15px red; margin-bottom: 5px;">DARK RYXINZ</h1>
-        <p style="font-size: 10px; color: #444; margin-bottom: 30px; letter-spacing: 2px;">V7.0 PERMANENT DATABASE</p>
-        <div style="width:100%; max-width:300px;">
+        <div class="login-box">
+            <h1>DARK RYXINZ</h1>
             <input type="text" id="username" placeholder="Username">
             <input type="password" id="password" placeholder="Password">
-            <button class="btn" onclick="loginAction()">Authorize Access</button>
-            <p id="login-msg" style="color: red; font-size: 10px; text-align: center; margin-top: 10px; display: none;">ACCESS DENIED!</p>
+            <button class="btn" onclick="loginAction()">System Access</button>
+            <p id="error-msg" style="color: red; font-size: 10px; margin-top: 15px; display: none;"></p>
         </div>
     </div>
 
@@ -64,72 +66,64 @@
             <a onclick="showPage('home','nav-home')"><i class="fa-solid fa-house"></i> HOME</a>
             <a onclick="showPage('ceknik','nav-nik')"><i class="fa-solid fa-id-card"></i> CEK NIK REAL</a>
             <a onclick="showPage('webinspect','nav-inspect')"><i class="fa-solid fa-code"></i> WEB INSPECTOR</a>
-            <a onclick="showPage('admin','nav-admin')" id="side-admin" style="display:none;"><i class="fa-solid fa-user-plus"></i> GENERATE ACC</a>
-            <a onclick="clearStorage()" style="color: #444;"><i class="fa-solid fa-trash-can"></i> RESET DATABASE</a>
-            <a onclick="location.reload()" style="color:red; margin-top:30px; border-top: 1px solid #222;"><i class="fa-solid fa-power-off"></i> LOGOUT</a>
+            <a onclick="showPage('admin','nav-admin')" id="side-admin" style="display:none;"><i class="fa-solid fa-user-plus"></i> GENERATE ACCOUNT</a>
+            <a onclick="location.reload()" style="color:red; margin-top:40px;"><i class="fa-solid fa-power-off"></i> LOGOUT</a>
         </div>
 
         <div class="app-bar">
             <i class="fa-solid fa-bars-staggered" onclick="openNav(250)" style="cursor:pointer"></i>
             <h1>DARK RYXINZ</h1>
-            <i class="fa-solid fa-bolt" style="color:red"></i>
+            <i class="fa-solid fa-shield-virus" style="color:red"></i>
         </div>
 
         <div class="container">
             <div id="home" class="page active">
                 <div class="card">
-                    <div class="card-header"><i class="fa-solid fa-circle-user"></i> USER PROFILE</div>
-                    <div class="row"><div><div class="label">User ID</div><div class="value" id="res-user">-</div></div></div>
-                    <div class="row"><div><div class="label">Role Access</div><div class="value" id="res-role" style="color:red">-</div></div></div>
-                    <div class="row"><div><div class="label">Exp Session</div><div class="value" id="res-exp">-</div></div></div>
-                </div>
-                <div class="card" style="background: transparent; border: 1px dashed #333;">
-                    <div style="padding: 15px; font-size: 11px; color: #666; text-align: center;">
-                        Welcome to DARK RYXINZ Engine. <br>System is encrypted and secured.
-                    </div>
+                    <div class="card-header">IDENTITY</div>
+                    <div class="row"><div><div class="label">Username</div><div class="value" id="res-user">-</div></div></div>
+                    <div class="row"><div><div class="label">Status</div><div class="value" id="res-role" style="color:red">-</div></div></div>
+                    <div class="row"><div><div class="label">Expired</div><div class="value" id="res-exp">-</div></div></div>
                 </div>
             </div>
 
             <div id="ceknik" class="page">
                 <div class="card">
-                    <div class="card-header">NIK DATA ANALYZER</div>
+                    <div class="card-header">NIK ANALYZER</div>
                     <div style="padding:15px">
-                        <input type="number" id="nik-input" placeholder="Masukkan 16 Digit NIK">
-                        <button class="btn" onclick="analyzeNIK()">ANALYZE NIK</button>
+                        <input type="number" id="nik-input" placeholder="16 Digit NIK">
+                        <button class="btn" onclick="analyzeNIK()">ANALYZE</button>
                     </div>
                 </div>
                 <div id="nik-result" class="card" style="display:none;">
-                    <div class="card-header">BIODATA RESULT</div>
+                    <div class="card-header">BIODATA</div>
                     <div class="row"><div class="label">Gender</div><div class="value" id="res-gender">-</div></div>
-                    <div class="row"><div class="label">Birth Date</div><div class="value" id="res-birth">-</div></div>
-                    <div class="row"><div class="label">Data Quality</div><div class="value" style="color:lime">Valid 100%</div></div>
+                    <div class="row"><div class="label">Tgl Lahir</div><div class="value" id="res-birth">-</div></div>
                 </div>
             </div>
 
             <div id="webinspect" class="page">
                 <div class="card">
-                    <div class="card-header">REAL SOURCE INSPECTOR</div>
+                    <div class="card-header">BYPASS WEB SOURCE</div>
                     <div style="padding:15px">
                         <input type="text" id="web-url" placeholder="https://google.com">
-                        <button class="btn" id="btn-inspect" onclick="inspectWeb()">FETCH SOURCE CODE</button>
-                        <textarea id="web-output" rows="12" placeholder="HTML/CSS data beneran bakal muncul di sini..." style="margin-top:10px; font-family:monospace; font-size:10px; color: lime;"></textarea>
+                        <button class="btn" id="btn-inspect" onclick="inspectWeb()">INSPECT CODE</button>
+                        <textarea id="web-output" rows="12" placeholder="HTML/CSS result..." style="margin-top:10px; font-family:monospace; font-size:10px; color: #0f0;"></textarea>
                     </div>
                 </div>
             </div>
 
             <div id="admin" class="page">
                 <div class="card">
-                    <div class="card-header">ACCOUNT GENERATOR (OWNER)</div>
+                    <div class="card-header">CREATE NEW ACCOUNT</div>
                     <div style="padding:15px">
-                        <input type="text" id="g-us" placeholder="Set Username">
-                        <input type="text" id="g-pw" placeholder="Set Password">
+                        <input type="text" id="g-us" placeholder="Username">
+                        <input type="text" id="g-pw" placeholder="Password">
                         <select id="g-role">
-                            <option value="VIP MEMBER">VIP MEMBER</option>
-                            <option value="PREMIUM USER">PREMIUM USER</option>
-                            <option value="ADMIN ACCESS">ADMIN ACCESS</option>
+                            <option value="VIP MEMBER">VIP</option>
+                            <option value="ADMIN">ADMIN</option>
                         </select>
                         <input type="date" id="g-exp">
-                        <button class="btn" onclick="generateAcc()">GENERATE & SAVE PERMANENT</button>
+                        <button class="btn" onclick="generateAcc()">GENERATE PERMANENT</button>
                     </div>
                 </div>
             </div>
@@ -137,14 +131,14 @@
 
         <div class="nav-bottom">
             <div class="nav-item active" id="nav-home" onclick="showPage('home','nav-home')"><i class="fa-solid fa-house"></i>Home</div>
-            <div class="nav-item" id="nav-nik" onclick="showPage('ceknik','nav-nik')"><i class="fa-solid fa-search"></i>Cek NIK</div>
+            <div class="nav-item" id="nav-nik" onclick="showPage('ceknik','nav-nik')"><i class="fa-solid fa-search"></i>NIK</div>
             <div class="nav-item" id="nav-inspect" onclick="showPage('webinspect','nav-inspect')"><i class="fa-solid fa-code"></i>Inspect</div>
             <div class="nav-item" id="nav-admin" style="display:none;" onclick="showPage('admin','nav-admin')"><i class="fa-solid fa-key"></i>Owner</div>
         </div>
     </div>
 
     <script>
-        // --- PERMANENT DATABASE LOGIC ---
+        // DATABASE SIMPAN DI HP
         let db_users = JSON.parse(localStorage.getItem('ryxinz_db')) || [
             { us: "bramzx", pw: "bramzx", role: "OWNER / DEV", exp: "2099-09-09" }
         ];
@@ -152,11 +146,22 @@
         function loginAction() {
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
-            const msg = document.getElementById('login-msg');
+            const err = document.getElementById('error-msg');
             
             const userMatch = db_users.find(user => user.us === u && user.pw === p);
 
             if(userMatch) {
+                // --- LOGIC MATI OTOMATIS (EXPIRED CHECK) ---
+                const today = new Date();
+                const expDate = new Date(userMatch.exp);
+                
+                // Jika ID bukan bramzx dan tanggal sudah lewat
+                if (u !== "bramzx" && expDate < today.setHours(0,0,0,0)) {
+                    err.innerText = "AKSES MATI! Masa aktif akun sudah habis.";
+                    err.style.display = 'block';
+                    return;
+                }
+
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 document.getElementById('res-user').innerText = userMatch.us;
@@ -168,8 +173,8 @@
                     document.getElementById('nav-admin').style.display = 'flex';
                 }
             } else {
-                msg.style.display = 'block';
-                setTimeout(() => { msg.style.display = 'none'; }, 2000);
+                err.innerText = "Username atau Password Salah!";
+                err.style.display = 'block';
             }
         }
 
@@ -178,37 +183,26 @@
             const p = document.getElementById('g-pw').value;
             const r = document.getElementById('g-role').value;
             const e = document.getElementById('g-exp').value;
-
-            if(!u || !p || !e) return alert('Data Belum Lengkap!');
-
+            if(!u || !p || !e) return alert('Lengkapi data!');
             db_users.push({ us: u, pw: p, role: r, exp: e });
             localStorage.setItem('ryxinz_db', JSON.stringify(db_users));
-            
-            alert(`SUCCESS!\nUsername: ${u}\nPassword: ${p}\n\nAkun tersimpan permanen!`);
+            alert('Akun VIP Berhasil Dibuat!');
             document.getElementById('g-us').value = ""; document.getElementById('g-pw').value = "";
         }
-
-        function clearStorage() {
-            if(confirm("Hapus semua akun yang pernah di-generate?")) {
-                localStorage.removeItem('ryxinz_db');
-                location.reload();
-            }
-        }
-
-        function openNav(w) { document.getElementById("sidebar").style.width = w + "px"; }
 
         function showPage(pId, nId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(nId).classList.add('active');
-            openNav(0);
+            document.getElementById("sidebar").style.width = "0";
         }
 
-        // --- REAL NIK LOGIC ---
+        function openNav(w) { document.getElementById("sidebar").style.width = w + "px"; }
+
         function analyzeNIK() {
             const nik = document.getElementById('nik-input').value;
-            if(nik.length < 16) return alert('NIK must be 16 digits!');
+            if(nik.length < 16) return alert('NIK 16 Digit!');
             let dd = parseInt(nik.substring(6,8));
             const mm = nik.substring(8,10);
             let yy = parseInt(nik.substring(10,12));
@@ -220,21 +214,17 @@
             document.getElementById('res-birth').innerText = `${dd}-${mm}-${fullYear}`;
         }
 
-        // --- REAL WEB INSPECT ---
         async function inspectWeb() {
             const url = document.getElementById('web-url').value;
-            const output = document.getElementById('web-output');
-            const btn = document.getElementById('btn-inspect');
-            if(!url) return alert('Input URL!');
-            btn.innerText = "LOADING...";
+            const out = document.getElementById('web-output');
+            if(!url) return alert('URL!');
+            out.value = "Bypassing Security...";
             try {
                 const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
                 const data = await res.json();
-                output.value = data.contents;
-            } catch (err) { output.value = "Error: Gagal mengambil data. Gunakan HTTPS atau cek koneksi."; }
-            btn.innerText = "FETCH SOURCE CODE";
+                out.value = data.contents;
+            } catch (e) { out.value = "Failed to bypass. Site protected."; }
         }
     </script>
 </body>
 </html>
-
