@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DARK RYXINZ - ULTIMATE ENGINE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --red: #ff0000; --bg: #050505; --card: #111111; --border: #222; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { background: var(--bg); color: #fff; margin: 0; font-family: 'Roboto', sans-serif; padding-bottom: 80px; overflow-x: hidden; }
+
+        /* --- UI COMPONENTS --- */
+        #login-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+        #dashboard { display: none; }
+        .app-bar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: #0c0c0c; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .app-bar h1 { font-family: 'Orbitron'; font-size: 14px; color: var(--red); letter-spacing: 2px; text-shadow: 0 0 5px red; }
+
+        /* --- SIDEBAR --- */
+        #sidebar { height: 100%; width: 0; position: fixed; z-index: 9999; top: 0; left: 0; background: #0a0a0a; overflow-x: hidden; transition: 0.3s; border-right: 1px solid var(--red); padding-top: 60px; }
+        #sidebar a { padding: 15px 25px; text-decoration: none; font-size: 13px; color: #999; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #111; cursor: pointer; }
+        #sidebar a i { color: var(--red); width: 20px; text-align: center; }
+
+        /* --- PAGES --- */
+        .container { padding: 20px; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+        .page { display: none; }
+        .page.active { display: block; }
+        .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; overflow: hidden; }
+        .card-header { background: var(--red); padding: 10px 15px; font-weight: 700; font-size: 11px; font-family: 'Orbitron'; color: #000; text-transform: uppercase; }
+        .row { padding: 12px 15px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .label { font-size: 9px; color: #666; text-transform: uppercase; }
+        .value { font-size: 13px; font-weight: 700; text-align: right; }
+
+        input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid var(--border); border-radius: 8px; color: #fff; margin-bottom: 12px; font-size: 13px; }
+        input:focus { border-color: var(--red); }
+        .btn { background: var(--red); color: #000; width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: 700; text-transform: uppercase; cursor: pointer; font-family: 'Orbitron'; transition: 0.2s; }
+        .btn:active { transform: scale(0.98); opacity: 0.8; }
+        
+        /* --- NAV BOTTOM --- */
+        .nav-bottom { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #0c0c0c; display: flex; border-top: 1px solid var(--border); z-index: 1000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 9px; cursor: pointer; }
+        .nav-item.active { color: var(--red); text-shadow: 0 0 5px var(--red); }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-page">
+        <h1 style="font-family:'Orbitron'; color:red; text-shadow: 0 0 15px red; margin-bottom: 5px;">DARK RYXINZ</h1>
+        <p style="font-size: 10px; color: #444; margin-bottom: 30px; letter-spacing: 2px;">V7.0 PERMANENT DATABASE</p>
+        <div style="width:100%; max-width:300px;">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn" onclick="loginAction()">Authorize Access</button>
+            <p id="login-msg" style="color: red; font-size: 10px; text-align: center; margin-top: 10px; display: none;">ACCESS DENIED!</p>
+        </div>
+    </div>
+
+    <div id="dashboard">
+        <div id="sidebar">
+            <a onclick="showPage('home','nav-home')"><i class="fa-solid fa-house"></i> HOME</a>
+            <a onclick="showPage('ceknik','nav-nik')"><i class="fa-solid fa-id-card"></i> CEK NIK REAL</a>
+            <a onclick="showPage('webinspect','nav-inspect')"><i class="fa-solid fa-code"></i> WEB INSPECTOR</a>
+            <a onclick="showPage('admin','nav-admin')" id="side-admin" style="display:none;"><i class="fa-solid fa-user-plus"></i> GENERATE ACC</a>
+            <a onclick="clearStorage()" style="color: #444;"><i class="fa-solid fa-trash-can"></i> RESET DATABASE</a>
+            <a onclick="location.reload()" style="color:red; margin-top:30px; border-top: 1px solid #222;"><i class="fa-solid fa-power-off"></i> LOGOUT</a>
+        </div>
+
+        <div class="app-bar">
+            <i class="fa-solid fa-bars-staggered" onclick="openNav(250)" style="cursor:pointer"></i>
+            <h1>DARK RYXINZ</h1>
+            <i class="fa-solid fa-bolt" style="color:red"></i>
+        </div>
+
+        <div class="container">
+            <div id="home" class="page active">
+                <div class="card">
+                    <div class="card-header"><i class="fa-solid fa-circle-user"></i> USER PROFILE</div>
+                    <div class="row"><div><div class="label">User ID</div><div class="value" id="res-user">-</div></div></div>
+                    <div class="row"><div><div class="label">Role Access</div><div class="value" id="res-role" style="color:red">-</div></div></div>
+                    <div class="row"><div><div class="label">Exp Session</div><div class="value" id="res-exp">-</div></div></div>
+                </div>
+                <div class="card" style="background: transparent; border: 1px dashed #333;">
+                    <div style="padding: 15px; font-size: 11px; color: #666; text-align: center;">
+                        Welcome to DARK RYXINZ Engine. <br>System is encrypted and secured.
+                    </div>
+                </div>
+            </div>
+
+            <div id="ceknik" class="page">
+                <div class="card">
+                    <div class="card-header">NIK DATA ANALYZER</div>
+                    <div style="padding:15px">
+                        <input type="number" id="nik-input" placeholder="Masukkan 16 Digit NIK">
+                        <button class="btn" onclick="analyzeNIK()">ANALYZE NIK</button>
+                    </div>
+                </div>
+                <div id="nik-result" class="card" style="display:none;">
+                    <div class="card-header">BIODATA RESULT</div>
+                    <div class="row"><div class="label">Gender</div><div class="value" id="res-gender">-</div></div>
+                    <div class="row"><div class="label">Birth Date</div><div class="value" id="res-birth">-</div></div>
+                    <div class="row"><div class="label">Data Quality</div><div class="value" style="color:lime">Valid 100%</div></div>
+                </div>
+            </div>
+
+            <div id="webinspect" class="page">
+                <div class="card">
+                    <div class="card-header">REAL SOURCE INSPECTOR</div>
+                    <div style="padding:15px">
+                        <input type="text" id="web-url" placeholder="https://google.com">
+                        <button class="btn" id="btn-inspect" onclick="inspectWeb()">FETCH SOURCE CODE</button>
+                        <textarea id="web-output" rows="12" placeholder="HTML/CSS data beneran bakal muncul di sini..." style="margin-top:10px; font-family:monospace; font-size:10px; color: lime;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin" class="page">
+                <div class="card">
+                    <div class="card-header">ACCOUNT GENERATOR (OWNER)</div>
+                    <div style="padding:15px">
+                        <input type="text" id="g-us" placeholder="Set Username">
+                        <input type="text" id="g-pw" placeholder="Set Password">
+                        <select id="g-role">
+                            <option value="VIP MEMBER">VIP MEMBER</option>
+                            <option value="PREMIUM USER">PREMIUM USER</option>
+                            <option value="ADMIN ACCESS">ADMIN ACCESS</option>
+                        </select>
+                        <input type="date" id="g-exp">
+                        <button class="btn" onclick="generateAcc()">GENERATE & SAVE PERMANENT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-bottom">
+            <div class="nav-item active" id="nav-home" onclick="showPage('home','nav-home')"><i class="fa-solid fa-house"></i>Home</div>
+            <div class="nav-item" id="nav-nik" onclick="showPage('ceknik','nav-nik')"><i class="fa-solid fa-search"></i>Cek NIK</div>
+            <div class="nav-item" id="nav-inspect" onclick="showPage('webinspect','nav-inspect')"><i class="fa-solid fa-code"></i>Inspect</div>
+            <div class="nav-item" id="nav-admin" style="display:none;" onclick="showPage('admin','nav-admin')"><i class="fa-solid fa-key"></i>Owner</div>
+        </div>
+    </div>
+
+    <script>
+        // --- PERMANENT DATABASE LOGIC ---
+        let db_users = JSON.parse(localStorage.getItem('ryxinz_db')) || [
+            { us: "bramzx", pw: "bramzx", role: "OWNER / DEV", exp: "2099-09-09" }
+        ];
+
+        function loginAction() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const msg = document.getElementById('login-msg');
+            
+            const userMatch = db_users.find(user => user.us === u && user.pw === p);
+
+            if(userMatch) {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('res-user').innerText = userMatch.us;
+                document.getElementById('res-role').innerText = userMatch.role;
+                document.getElementById('res-exp').innerText = userMatch.exp;
+                
+                if(userMatch.us === "bramzx") {
+                    document.getElementById('side-admin').style.display = 'flex';
+                    document.getElementById('nav-admin').style.display = 'flex';
+                }
+            } else {
+                msg.style.display = 'block';
+                setTimeout(() => { msg.style.display = 'none'; }, 2000);
+            }
+        }
+
+        function generateAcc() {
+            const u = document.getElementById('g-us').value;
+            const p = document.getElementById('g-pw').value;
+            const r = document.getElementById('g-role').value;
+            const e = document.getElementById('g-exp').value;
+
+            if(!u || !p || !e) return alert('Data Belum Lengkap!');
+
+            db_users.push({ us: u, pw: p, role: r, exp: e });
+            localStorage.setItem('ryxinz_db', JSON.stringify(db_users));
+            
+            alert(`SUCCESS!\nUsername: ${u}\nPassword: ${p}\n\nAkun tersimpan permanen!`);
+            document.getElementById('g-us').value = ""; document.getElementById('g-pw').value = "";
+        }
+
+        function clearStorage() {
+            if(confirm("Hapus semua akun yang pernah di-generate?")) {
+                localStorage.removeItem('ryxinz_db');
+                location.reload();
+            }
+        }
+
+        function openNav(w) { document.getElementById("sidebar").style.width = w + "px"; }
+
+        function showPage(pId, nId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(nId).classList.add('active');
+            openNav(0);
+        }
+
+        // --- REAL NIK LOGIC ---
+        function analyzeNIK() {
+            const nik = document.getElementById('nik-input').value;
+            if(nik.length < 16) return alert('NIK must be 16 digits!');
+            let dd = parseInt(nik.substring(6,8));
+            const mm = nik.substring(8,10);
+            let yy = parseInt(nik.substring(10,12));
+            const gender = dd > 40 ? "PEREMPUAN" : "LAKI-LAKI";
+            if(dd > 40) dd -= 40;
+            const fullYear = yy <= 26 ? "20" + (yy < 10 ? "0" + yy : yy) : "19" + yy;
+            document.getElementById('nik-result').style.display = 'block';
+            document.getElementById('res-gender').innerText = gender;
+            document.getElementById('res-birth').innerText = `${dd}-${mm}-${fullYear}`;
+        }
+
+        // --- REAL WEB INSPECT ---
+        async function inspectWeb() {
+            const url = document.getElementById('web-url').value;
+            const output = document.getElementById('web-output');
+            const btn = document.getElementById('btn-inspect');
+            if(!url) return alert('Input URL!');
+            btn.innerText = "LOADING...";
+            try {
+                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+                output.value = data.contents;
+            } catch (err) { output.value = "Error: Gagal mengambil data. Gunakan HTTPS atau cek koneksi."; }
+            btn.innerText = "FETCH SOURCE CODE";
+        }
+    </script>
+</body>
+</html>
+
